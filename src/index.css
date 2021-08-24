@@ -1,0 +1,29 @@
+::-webkit-scrollbar { width: 0 !important; display: none; }
+
+body {
+  overflow-x: hidden;
+}
+
+.home-block-title {
+  display: inline-block;
+  margin-top: 1rem /* 16/16 */;
+  margin-bottom: 1rem /* 16/16 */;
+  padding-bottom: .75rem /* 12/16 */;
+  border-bottom: .375rem /* 6/16 */ solid #479f76;
+}
+
+a {
+  color: #000;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #479f76;
+}
+
+.text-ellis {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  word-break: break-all;
+}

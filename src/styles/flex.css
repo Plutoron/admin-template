@@ -1,0 +1,81 @@
+.FBH,
+.FBV {
+  display: flex;
+}
+
+.IFBH,
+.IFBV {
+  display: inline-flex;
+}
+
+.IFBV,
+.FBV {
+  flex-direction: column;
+}
+
+.FBW {
+  flex-wrap: wrap;
+}
+
+.FB10 {
+  flex: 10;
+}
+.FB9 {
+  flex: 9;
+}
+.FB8 {
+  flex: 8;
+}
+.FB7 {
+  flex: 7;
+}
+.FB6 {
+  flex: 6;
+}
+.FB5 {
+  flex: 5;
+}
+.FB4 {
+  flex: 4;
+}
+.FB3 {
+  flex: 3;
+}
+.FB2 {
+  flex: 2;
+}
+.FB1 {
+  flex: 1;
+}
+
+.FBAC {
+  align-items: center;
+}
+
+.FBAJ {
+  align-items: flex-start;
+}
+
+.FBAE {
+  align-items: flex-end;
+}
+
+.FBJA {
+  justify-content: space-around;
+}
+
+.FBJB {
+  justify-content: space-between;
+}
+
+.FBJC {
+  justify-content: center;
+}
+
+.FBJE {
+  justify-content: flex-end;
+}
+
+.FBJS {
+  justify-content: flex-start;
+}
