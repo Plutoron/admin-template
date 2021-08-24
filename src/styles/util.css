@@ -6,10 +6,26 @@
   margin-left: 8px;
 }
 
+.mt8 {
+  margin-top: 8px;
+}
+
+.mb8 {
+  margin-bottom: 8px;
+}
+
 .pr8 {
   padding-right: 8px;
 }
 
 .pl8 {
   padding-left: 8px;
+}
+
+.pt8 {
+  padding-top: 8px;
+}
+
+.pb8 {
+  padding-bottom: 8px;
 }
