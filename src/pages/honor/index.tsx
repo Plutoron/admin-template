@@ -1,37 +1,42 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import { Divider, Button, Modal } from 'antd'
+import { Divider, Button, Modal, message } from 'antd'
+import { get, _delete } from '@util/http'
+ 
 import Drawer from './drawer'
 import Table from './table'
-
 import { HonorInterface } from './table'
 
 function Honor() {
   const [visible, setVisible] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [current, setCurrent] = useState<({ title: string, id: undefined | number})>({ title: '', id: undefined });
+  const [current, setCurrent] = useState<HonorInterface>({} as HonorInterface);
   const [data, setData] = useState<[HonorInterface?]>([]);
 
   const showAdd = useCallback(() => {
-    setCurrent({ title: '', id: undefined })
+    setCurrent({} as HonorInterface)
     setVisible(true)
   }, [])
 
   const hideDrawer = useCallback(() => {
-    setCurrent({ title: '', id: undefined })
+    setCurrent({} as HonorInterface)
     setVisible(false)
   }, [])
 
-  const onSubmit = () => {
+  const getData = useCallback(async () => {
     setLoading(true)
-
-    setTimeout(() => {
+    try {
+      const res = await get('honor')
+      console.log(res)
+      setData(res)
       setLoading(false)
-      setVisible(false)
-    }, 3000)
-  }
+    } catch (e) {
+      setLoading(false)
+      message.error(e)
+    }
+  }, [])
 
-  const triggerEdit = useCallback(({title, id}): void => {
-    setCurrent({ title, id })
+  const triggerEdit = useCallback(({title, id, img}): void => {
+    setCurrent({ title, id, img })
     setVisible(true)
   }, [])
 
@@ -39,13 +44,21 @@ function Honor() {
     Modal.confirm({
       title: `您确定要删除${title}吗`,
       onOk() {
-
+        return new Promise((resolve, reject) => {
+          _delete(`honor/${id}`).then(res => {
+            message.success('删除成功')
+            getData()
+            resolve(res)
+          }).catch(e => {
+            reject()
+          })
+        })       
       }
     })
   }, [])
 
   useEffect(() => {
-    setData([{ title: 'aaaa', id: 11, url: 'xxxx' }])
+    getData()
   }, [])
 
   return (
@@ -56,6 +69,7 @@ function Honor() {
         <Divider />
 
         <Table 
+          loading={loading}
           data={data}   
           triggerEdit={triggerEdit}     
           triggerDelete={triggerDelete}     
@@ -63,10 +77,11 @@ function Honor() {
 
         <Drawer 
           visible={visible}
-          loading={loading}
+          id={current.id}
           title={current.title}
+          img={current.img}
           onClose={hideDrawer}
-          onSubmit={onSubmit}
+          onSubmitted={getData}
         />
       </div>
     </>

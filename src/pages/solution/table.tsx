@@ -1,38 +1,38 @@
-import React, { useMemo, useState, useEffect, useCallback } from 'react'
-
+import React, { useMemo } from 'react'
 import { Table } from 'antd' 
 
-export interface SolutionInterface {
+export interface solutionInterface {
   id: number,
   type: string,
   title: string,
-  url: string
+  img: string
 }
 
 export interface _TableInterface {
-  data: [SolutionInterface?],
-  triggerEdit: ({ title, type, id }: { title: string, type: string, id: number }) => any
-  triggerDelete: ({ title, type, id }: { title: string, type: string, id: number }) => any
+  loading: boolean,
+  data: [solutionInterface?],
+  triggerEdit: ({}: solutionInterface) => any
+  triggerDelete: ({}: { id: number, title: string }) => any
 }
 
-const _Table: React.FC<_TableInterface> = ({ data, triggerEdit, triggerDelete }) => {
+const _Table: React.FC<_TableInterface> = ({ loading, data, triggerEdit, triggerDelete }) => {
   const columns = useMemo(() => {
     return [{
       title: '标题',
       dataIndex: 'title',
     }, {
       title: '链接',
-      dataIndex: 'url',
+      dataIndex: 'img',
       render: (text, record, index) => {
-        return <img src={text} width="100" />
+        return <a href={text} target="_blank"><img src={text} height="50" /></a>
       }
     }, {
       title: '操作',
       render: (text, record, index) => {
-        const { title, type, id } = record
+        const { title, type, id, img } = record
         return <>
-          <a className="mr8" onClick={() => triggerEdit({ title, type, id })}>编辑</a>
-          <a onClick={() => triggerDelete({ title, type, id })}>删除</a>
+          <a className="mr8" onClick={() => triggerEdit({ title, type, id, img })}>编辑</a>
+          <a onClick={() => triggerDelete({ title, id })}>删除</a>
         </>
       }
     }]
@@ -41,6 +41,7 @@ const _Table: React.FC<_TableInterface> = ({ data, triggerEdit, triggerDelete })
   return (
     <Table
       rowKey="title"
+      loading={loading}
       columns={columns} 
       dataSource={data} 
     />

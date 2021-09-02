@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import { Divider, Button, Modal, Tabs } from 'antd'
+import { Divider, Button, Modal, Tabs, message } from 'antd'
+import { get, _delete } from '@util/http'
+import { SolutionTypes } from '@src/enums'
+
+import { solutionInterface } from './table'
 import Drawer from './drawer'
 import Table from './table'
-
-import { SolutionInterface } from './table'
-import { SolutionTypes } from '@src/enums'
 
 const { TabPane } = Tabs
 
@@ -12,51 +13,80 @@ function Solution() {
   const [activeKey, setActiveKey] = useState('build');
   const [visible, setVisible] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [current, setCurrent] = useState<({ title: string, type: string, id: undefined | number})>({ title: '', type: '', id: undefined });
-  const [buildData, setBuildData] = useState<[SolutionInterface?]>([]);
-  const [manageData, setMangeData] = useState<[SolutionInterface?]>([]);
-  const [protectData, setProtectData] = useState<[SolutionInterface?]>([]);
+  const [current, setCurrent] = useState<solutionInterface>({} as solutionInterface);
+  const [buildData, setBuildData] = useState<[solutionInterface?]>([]);
+  const [manageData, setMangeData] = useState<[solutionInterface?]>([]);
+  const [protectData, setProtectData] = useState<[solutionInterface?]>([]);
 
   const showAdd = useCallback(() => {
-    setCurrent({ title: '', type: '', id: undefined })
+    setCurrent({} as solutionInterface)
     setVisible(true)
   }, [])
 
   const hideDrawer = useCallback(() => {
-    setCurrent({ title: '', type: '', id: undefined })
+    setCurrent({} as solutionInterface)
     setVisible(false)
   }, [])
 
-  const onSubmit = () => {
-    setLoading(true)
-
-    setTimeout(() => {
-      setLoading(false)
-      setVisible(false)
-    }, 3000)
-  }
-
-  const triggerEdit = useCallback(({title, type, id}): void => {
-    setCurrent({ title, type, id })
+  const triggerEdit = useCallback(({title, type, id, img}): void => {
+    setCurrent({ title, type, id, img })
     setVisible(true)
   }, [])
 
-  const triggerDelete = useCallback(({title, type, id}): void => {
+  const triggerDelete = useCallback(({title, id}): void => {
     Modal.confirm({
       title: `您确定要删除${title}吗`,
       onOk() {
-
+        Modal.confirm({
+          title: `您确定要删除${title}吗`,
+          onOk() {
+            return new Promise((resolve, reject) => {
+              _delete(`solution/${id}`).then(res => {
+                message.success('删除成功')
+                getData()
+                resolve(res)
+              }).catch(e => {
+                reject()
+              })
+            })       
+          }
+        })
       }
     })
   }, [])
 
-  const getData = (type) => {
+  const getData = useCallback(async () => {
+    setLoading(true)
+    try {
+      const res = await get(`solution/${activeKey}`)
+      console.log(res)
+
+      switch (activeKey) {
+        case 'build':
+          setBuildData(res)
+          break;
+
+        case 'manage':
+          setMangeData(res)
+          break;
     
-  }
+        case 'protect':
+          setProtectData(res)
+          break;
+
+        default:
+          break;
+      }
+      setLoading(false)
+    } catch (e) {
+      message.error(e)
+      setLoading(false)
+    }
+  }, [activeKey])
 
   useEffect(() => {
-    // setData([{ title: 'aaaa', type: '', id: 11, url: 'xxxx' }])
-  }, [])
+    getData()
+  }, [activeKey])
    
   return (
     <>
@@ -68,6 +98,7 @@ function Solution() {
         <Tabs activeKey={activeKey} onChange={activeKey => setActiveKey(activeKey)} >
           <TabPane tab="建筑类" key={SolutionTypes['建筑类']}>
             <Table 
+              loading={loading}
               data={buildData}   
               triggerEdit={triggerEdit}     
               triggerDelete={triggerDelete}     
@@ -75,6 +106,7 @@ function Solution() {
           </TabPane>
           <TabPane tab="资源管理类" key={SolutionTypes['资源管理类']}>
             <Table 
+              loading={loading}
               data={manageData}   
               triggerEdit={triggerEdit}     
               triggerDelete={triggerDelete}     
@@ -82,6 +114,7 @@ function Solution() {
           </TabPane>
           <TabPane tab="资源保护类" key={SolutionTypes['资源保护类']}>
             <Table 
+              loading={loading}
               data={protectData}   
               triggerEdit={triggerEdit}     
               triggerDelete={triggerDelete}     
@@ -92,9 +125,12 @@ function Solution() {
         <Drawer 
           visible={visible}
           loading={loading}
+          id={current.id}
           title={current.title}
+          type={current.type || activeKey}
+          img={current.img}
           onClose={hideDrawer}
-          onSubmit={onSubmit}
+          onSubmitted={getData}
         />
       </div>
     </>

@@ -1,9 +1,9 @@
-import React, { useMemo, useState, useEffect, useCallback } from 'react'
-import { Button, Drawer, Form, Input, Upload, Select } from 'antd' 
-
+import React, { useEffect, useCallback } from 'react'
+import { Button, Drawer, Form, Input, Upload, Select, message, Modal } from 'antd' 
 import { UploadOutlined } from '@ant-design/icons'
-
 import { SolutionTypes } from '@src/enums'
+import { post } from '@util/http'
+import { generateUploadFilelist } from '@util/util'
 
 const { useForm } = Form
 const { Option } = Select
@@ -11,17 +11,16 @@ const { Option } = Select
 interface Props {
   visible: boolean,
   loading: boolean,
-  title: string,
+  id?: number,
+  title?: string,
+  type?: string,
+  img?: string,
   onClose: () => void,
-  onSubmit: () => void,
+  onSubmitted: () => void,
 }
 
-const _Drawer: React.FC<Props> = ({ visible, onClose, loading, onSubmit, title }) => {
+const _Drawer: React.FC<Props> = ({ visible, onClose, loading, onSubmitted, title, id, type, img }) => {
   const [form] = useForm()
-
-  const _onClose = useCallback(() => {
-    onClose()
-  }, [])
 
   const normFile = useCallback((e: any) => {
     console.log('Upload event:', e);
@@ -36,10 +35,47 @@ const _Drawer: React.FC<Props> = ({ visible, onClose, loading, onSubmit, title }
       form.resetFields()
     } else {
       form.setFieldsValue({
-        title
+        title,
+        type,
+        img: generateUploadFilelist(img)
       })
     }
   }, [visible, title])
+
+  const _onSubmit = () => {
+    form.validateFields()
+      .then(values => {
+        console.log(values)
+
+        const { img } = values
+
+        if (!img || !img[0] || img[0].status !== 'done') {
+          message.error('请检查图片')
+          return
+        }
+
+        Modal.confirm({
+          title: `您确定要${id ? '更新' : '添加'}吗`,
+          onOk() {
+            return new Promise((resolve, reject) => {
+              post(
+                id ? `solution/${id}` : 'solution/add', {
+                ...values,
+                img: img[0].response.data,
+              }).then(res => {
+                message.success('提交成功')
+                onSubmitted()
+                onClose()
+                resolve(res)
+              }).catch(e => {
+                reject()
+              })
+            })          
+          }
+        })
+      })
+    .catch(errorInfo => {})
+  }
 
   return (
     <>
@@ -48,7 +84,7 @@ const _Drawer: React.FC<Props> = ({ visible, onClose, loading, onSubmit, title }
         placement="right"
         width={640}
         closable={false}
-        onClose={_onClose}
+        onClose={onClose}
         visible={visible}
         footer={
           <div
@@ -56,10 +92,10 @@ const _Drawer: React.FC<Props> = ({ visible, onClose, loading, onSubmit, title }
               textAlign: 'right',
             }}
           >
-            <Button onClick={_onClose} style={{ marginRight: 8 }}>
+            <Button onClick={onClose} style={{ marginRight: 8 }}>
               取消
             </Button>
-            <Button loading={loading} onClick={onSubmit} type="primary">
+            <Button loading={loading} onClick={_onSubmit} type="primary">
               提交
             </Button>
           </div>
@@ -92,12 +128,12 @@ const _Drawer: React.FC<Props> = ({ visible, onClose, loading, onSubmit, title }
           </Form.Item>
 
           <Form.Item
-            name="url"
+            name="img"
             label="图片"
             valuePropName="fileList"
             getValueFromEvent={normFile}
           >
-            <Upload name="logo" action="/upload.do" listType="picture" maxCount={1}>
+            <Upload name="file" action="/api/upload" accept="image/*" listType="picture" maxCount={1}>
               <Button icon={<UploadOutlined />}>点击上传</Button>
             </Upload>
           </Form.Item>

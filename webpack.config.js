@@ -25,6 +25,13 @@ module.exports = (env, argv) => {
       open: false,
       hot: true,
       port: 8080,
+      proxy: {
+        '/api': {
+          target: 'http://localhost:3031', // 这是本地用node写的一个服务，用webpack-dev-server起的服务默认端口是8080
+          pathRewrite: {"/api" : ""}, // 后台在转接的时候url中是没有 /api 的
+          changeOrigin: true, // 加了这个属性，那后端收到的请求头中的host是目标地址 target
+        },
+      }
     },
     optimization: {
       splitChunks: {

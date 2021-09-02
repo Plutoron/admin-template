@@ -1,39 +1,50 @@
 import React, { useState, useEffect, useCallback } from 'react'
-
-import { Button, Input, Modal } from 'antd'
+import { Button, Input, Modal, message } from 'antd'
+import { post } from '@util/http'
 
 const { TextArea } = Input
 
-const mock = '上海成事林业规划设计有限公司于2002年07月05日成立，公司经营范围包括：林业调查和规划、设计、监理和咨询，造林绿化，技术服务等上海成事林业规划设计有限公司于2002年07月05日成立，公司经营范围包括：林业调查和规划、设计、监理和咨询，造林绿化，技术服务等上海成事林业规划设计有限公司于2002年07月05日成立，公司经营范围包括：林业调查和规划、设计、监理和咨询，造林绿化，技术服务等上海成事林业规划设计有限公司于2002年07月05日成立，公司经营范围包括：林业调查和规划、设计、监理和咨询，造林绿化，技术服务等上海成事林业规划设计有限公司于2002年07月05日成立，公司经营范围包括：林业调查和规划、设计、监理和咨询，造林绿化，技术服务等'
-  
-function Intro() {
-  const [intro, setIntro] = useState('')
+export interface introInterface {
+  intro: string
+}
+
+const Intro: React.FC<introInterface> = ({ intro }) => {
+  const [_intro, setIntro] = useState('')
 
   const update = useCallback(() => {
     Modal.confirm({
       title: '您确定要更新公司简介吗',
       onOk() {
-        console.log(intro)
+        return new Promise((resolve, reject) => {
+          post('company/detail', {
+            intro: _intro
+          }).then(res => {
+            message.success('提交成功')
+            resolve(res)
+          }).catch(e => {
+            reject()
+          })
+        })         
       }
     })
-  }, [intro])
+  }, [_intro])
 
   useEffect(() => {
-    setIntro(mock)
-  }, [])
+    setIntro(intro)
+  }, [intro])
 
   return (
     <>
       <div>
-        <div>公司简介</div>
+        <div className="mb8">公司简介</div>
         <div>
           <TextArea 
             style={{ width: 650, display: 'block'}} 
-            value={intro} 
+            value={_intro} 
             rows={10}
             onChange={e => setIntro(e.target.value)} 
           />
-          <Button className="mt8" onClick={update}>提交</Button>
+          <Button type="primary" className="mt8" onClick={update}>提交</Button>
         </div>
       </div>
     </>

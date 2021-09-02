@@ -6,5 +6,6 @@ import './index.css'
 import 'antd/dist/antd.less'
 import './styles/flex.css'
 import './styles/util.css'
+import './styles/antd.css'
 
 ReactDOM.render(<App />, document.getElementById('app'))
