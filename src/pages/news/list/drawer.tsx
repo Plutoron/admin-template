@@ -1,6 +1,7 @@
 import React, { useMemo, useState, useEffect, useCallback } from 'react'
-import { Button, Drawer, Form, Input, Upload, message, Modal } from 'antd' 
+import { Button, Drawer, Form, Input, Upload, message, Modal, DatePicker } from 'antd' 
 import { UploadOutlined } from '@ant-design/icons'
+import moment from 'moment';
 import { post } from '@util/http'  
 import { generateUploadFilelist } from '@util/util'  
 
@@ -10,12 +11,14 @@ interface Props {
   visible: boolean,
   id?: number,
   title?: string,
-  img?: string,
+  subtitle?: string,
+  time?: number,
+  poster?: string,
   onClose: () => void,
   onSubmitted: () => void,
 }
 
-const _Drawer: React.FC<Props> = ({ visible, onClose, onSubmitted, id, title, img }) => {
+const _Drawer: React.FC<Props> = ({ visible, onClose, onSubmitted, id, title, subtitle, time, poster }) => {
   const [form] = useForm()
 
   const normFile = useCallback((e: any) => {
@@ -32,7 +35,9 @@ const _Drawer: React.FC<Props> = ({ visible, onClose, onSubmitted, id, title, im
     } else {
       form.setFieldsValue({
         title,
-        img: generateUploadFilelist(img)
+        subtitle,
+        time: moment(time),
+        poster: generateUploadFilelist(poster)
       })
     }
   }, [visible, title])
@@ -42,9 +47,9 @@ const _Drawer: React.FC<Props> = ({ visible, onClose, onSubmitted, id, title, im
       .then(values => {
         console.log(values)
 
-        const { img } = values
+        const { poster, time } = values
 
-        if (!img || !img[0] || img[0].status !== 'done') {
+        if (!poster || !poster[0] || poster[0].status !== 'done') {
           message.error('请检查图片')
           return
         }
@@ -54,9 +59,10 @@ const _Drawer: React.FC<Props> = ({ visible, onClose, onSubmitted, id, title, im
           onOk() {
             return new Promise((resolve, reject) => {
               post(
-                id ? `honor/${id}` : 'honor', {
+                id ? `news/${id}` : 'news', {
                 ...values,
-                img: img[0].response.data,
+                time: time.format('YYYY-MM-DD'),
+                poster: poster[0].response.data,
               }).then(res => {
                 message.success('提交成功')
                 onSubmitted()
@@ -75,7 +81,7 @@ const _Drawer: React.FC<Props> = ({ visible, onClose, onSubmitted, id, title, im
   return (
     <>
       <Drawer
-        title={`${id ? '更新' : '添加'}荣誉`}
+        title={`${id ? '更新' : '添加'}新闻`}
         placement="right"
         width={640}
         closable={false}
@@ -115,7 +121,26 @@ const _Drawer: React.FC<Props> = ({ visible, onClose, onSubmitted, id, title, im
           </Form.Item>
 
           <Form.Item
-            name="img"
+            name="subtitle"
+            label="二级标题"
+            rules={[{ required: true, message: '请输入' }]}
+          >
+            <Input
+              style={{ width: '100%' }}
+              placeholder=""
+            />
+          </Form.Item>
+
+          <Form.Item 
+            name="time" 
+            label="时间" 
+            rules={[{ type: 'object' as const, required: true, message: '请选择时间' }]}
+          >
+            <DatePicker />
+          </Form.Item>
+
+          <Form.Item
+            name="poster"
             label="图片"
             valuePropName="fileList"
             getValueFromEvent={normFile}

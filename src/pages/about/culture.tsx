@@ -1,5 +1,5 @@
 import React, { useEffect, useCallback, useState } from 'react'
-import { Button, Modal, message } from 'antd'
+import { Modal, message } from 'antd'
 import { get, post } from '@util/http'
 
 import RichTextEditor from '@components/richtext-editor'
@@ -9,7 +9,7 @@ const Hire = () => {
 
   const getData = async () => {
     try {
-      const res = await get('hire')
+      const res = await get('culture')
       console.log(res)
       setHtml(res.html)
     } catch (e) {
@@ -19,10 +19,10 @@ const Hire = () => {
 
   const submit = useCallback((html) => {
     Modal.confirm({
-      title: '您确定要更新招贤纳士吗',
+      title: '您确定要更新企业文化吗',
       onOk() {
         return new Promise((resolve, reject) => {
-          post('hire', {
+          post('culture', {
             html
           }).then(res => {
             message.success('提交成功')

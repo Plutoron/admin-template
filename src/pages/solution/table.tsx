@@ -40,7 +40,7 @@ const _Table: React.FC<_TableInterface> = ({ loading, data, triggerEdit, trigger
 
   return (
     <Table
-      rowKey="title"
+      rowKey="id"
       loading={loading}
       columns={columns} 
       dataSource={data} 

@@ -5,6 +5,7 @@ import { get } from '@util/http'
 import Info from './info'
 import Intro from './intro'
 import Group from './group'
+import Culture from './culture'
 
 const { TabPane } = Tabs
 
@@ -49,10 +50,7 @@ function About() {
         </TabPane>
 
         <TabPane tab="企业文化" key='cultrue' forceRender>
-          <div>
-            <div>企业文化</div>
-            <div></div>
-          </div>
+          <Culture />
         </TabPane>
       </Tabs>
     </>

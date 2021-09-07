@@ -1,5 +1,6 @@
 import Home from '@pages/home'
-import News from '@pages/news'
+import News from '@pages/news/list'
+import NewsDetail from '@pages/news/detail'
 import Honor from '@pages/honor'
 import Solution from '@pages/solution'
 import Hire from '@pages/hire'
@@ -13,7 +14,14 @@ const routers = [{
 }, {
   path: '/news',
   title: '新闻配置',
-  component: News
+  component: News,
+  routes: [
+    {
+      path: '/news/:id',
+      title: '新闻详情',
+      component: NewsDetail
+    }, 
+  ]
 }, {
   path: '/honor',
   title: '荣誉配置',
