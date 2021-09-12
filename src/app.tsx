@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { Suspense } from 'react'
+
 import {
   HashRouter as Router,
   Switch,
@@ -8,6 +9,7 @@ import {
 
 import Layout from './layout/layout'
 import routes from '@src/routes'
+import { Spin } from 'antd'
 
 const renderRouter = (data) => {
   const renderItem = ({ path, Node }) => {
@@ -48,10 +50,12 @@ const Routers = () => {
 
 export default function App() {
   return (
-    <Router>
-      <Layout>
-        <Routers />
-      </Layout>
-    </Router>
+    <Suspense fallback={<div style={{ textAlign: 'center', marginTop: 50 }}><Spin></Spin></div>}>
+      <Router>
+        <Layout>
+          <Routers />
+        </Layout>
+      </Router>
+    </Suspense>
   )
 }

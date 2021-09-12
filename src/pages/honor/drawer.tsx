@@ -120,7 +120,7 @@ const _Drawer: React.FC<Props> = ({ visible, onClose, onSubmitted, id, title, im
             valuePropName="fileList"
             getValueFromEvent={normFile}
           >
-            <Upload name="file" action="/api/upload" accept="image/*" listType="picture" maxCount={1}>
+            <Upload name="file" action="/server/upload" accept="image/*" listType="picture" maxCount={1}>
               <Button icon={<UploadOutlined />}>点击上传</Button>
             </Upload>
           </Form.Item>

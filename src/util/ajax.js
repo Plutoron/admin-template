@@ -1,5 +1,5 @@
 const config = {
-  baseUrl: '/api/',
+  baseUrl: '/server/',
 }
 
 const serialize = (obj) => {

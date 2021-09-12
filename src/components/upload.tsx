@@ -23,7 +23,7 @@ const _Upload: React.FC<uploadInterface> = ({ onChange }) => {
       <Upload 
         style={{ width: 300 }} 
         name="file" 
-        action="/api/upload"
+        action="/server/upload"
         accept="image/*"
         listType="picture" 
         maxCount={1}

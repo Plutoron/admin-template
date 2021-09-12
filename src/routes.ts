@@ -1,11 +1,21 @@
-import Home from '@pages/home'
-import News from '@pages/news/list'
-import NewsDetail from '@pages/news/detail'
-import Honor from '@pages/honor'
-import Solution from '@pages/solution'
-import Hire from '@pages/hire'
-import About from '@pages/about'
-import User from '@pages/user'
+// import Home from '@pages/home'
+// import News from '@pages/news/list'
+// import NewsDetail from '@pages/news/detail'
+// import Honor from '@pages/honor'
+// import Solution from '@pages/solution'
+// import Hire from '@pages/hire'
+// import About from '@pages/about'
+// import User from '@pages/user'
+
+import { lazy } from 'react'
+
+const Home = lazy(() => import('@pages/home'))
+const News = lazy(() => import('@pages/news/list'))
+const NewsDetail = lazy(() => import('@pages/news/detail'))
+const Honor = lazy(() => import('@pages/honor'))
+const Solution = lazy(() => import('@pages/solution'))
+const Hire = lazy(() => import('@pages/hire'))
+const About = lazy(() => import('@pages/about'))
 
 const routers = [{
   path: '/home',
@@ -38,10 +48,10 @@ const routers = [{
   path: '/about',
   title: '关于我们配置',
   component: About
-}, {
-  path: '/user',
-  title: '用户管理',
-  component: User
+// }, {
+//   path: '/user',
+//   title: '用户管理',
+//   component: User
 }, {
   redirect: true,
   path: '/home',

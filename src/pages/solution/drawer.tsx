@@ -59,7 +59,7 @@ const _Drawer: React.FC<Props> = ({ visible, onClose, loading, onSubmitted, titl
           onOk() {
             return new Promise((resolve, reject) => {
               post(
-                id ? `solution/${id}` : 'solution/add', {
+                id ? `solution/${id}` : 'solution', {
                 ...values,
                 img: img[0].response.data,
               }).then(res => {
@@ -133,7 +133,7 @@ const _Drawer: React.FC<Props> = ({ visible, onClose, loading, onSubmitted, titl
             valuePropName="fileList"
             getValueFromEvent={normFile}
           >
-            <Upload name="file" action="/api/upload" accept="image/*" listType="picture" maxCount={1}>
+            <Upload name="file" action="/server/upload" accept="image/*" listType="picture" maxCount={1}>
               <Button icon={<UploadOutlined />}>点击上传</Button>
             </Upload>
           </Form.Item>
