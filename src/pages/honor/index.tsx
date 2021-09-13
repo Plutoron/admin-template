@@ -50,6 +50,7 @@ function Honor() {
             getData()
             resolve(res)
           }).catch(e => {
+            message.error(e)
             reject()
           })
         })       

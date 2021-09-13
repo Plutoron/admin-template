@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Button, Drawer, Form, Input, message, Modal } from 'antd' 
+import { Button, Drawer, Form, message, Modal } from 'antd' 
 import { post } from '@util/http'  
 import { generateUploadFilelist } from '@util/util'  
 import UploadFormItem from '@components/upload-form-item'
@@ -9,13 +9,12 @@ const { useForm } = Form
 interface Props {
   visible: boolean,
   id?: number,
-  title?: string,
   img?: string,
   onClose: () => void,
   onSubmitted: () => void,
 }
 
-const _Drawer: React.FC<Props> = ({ visible, onClose, onSubmitted, id, title, img }) => {
+const _Drawer: React.FC<Props> = ({ visible, onClose, onSubmitted, id, img }) => {
   const [form] = useForm()
 
   useEffect(() => {
@@ -23,11 +22,10 @@ const _Drawer: React.FC<Props> = ({ visible, onClose, onSubmitted, id, title, im
       form.resetFields()
     } else {
       form.setFieldsValue({
-        title,
         img: generateUploadFilelist(img)
       })
     }
-  }, [visible, title])
+  }, [visible])
 
   const _onSubmit = () => {
     form.validateFields()
@@ -46,7 +44,7 @@ const _Drawer: React.FC<Props> = ({ visible, onClose, onSubmitted, id, title, im
           onOk() {
             return new Promise((resolve, reject) => {
               post(
-                id ? `honor/${id}` : 'honor', {
+                id ? `banner/${id}` : 'banner', {
                 ...values,
                 img: img[0].response.data,
               }).then(res => {
@@ -68,7 +66,7 @@ const _Drawer: React.FC<Props> = ({ visible, onClose, onSubmitted, id, title, im
   return (
     <>
       <Drawer
-        title={`${id ? '更新' : '添加'}荣誉`}
+        title={`${id ? '更新' : '添加'}banner`}
         placement="right"
         width={640}
         closable={false}
@@ -96,17 +94,6 @@ const _Drawer: React.FC<Props> = ({ visible, onClose, onSubmitted, id, title, im
           wrapperCol={{ span: 14 }} 
           hideRequiredMark
         >
-          <Form.Item
-            name="title"
-            label="标题"
-            rules={[{ required: true, message: '请输入' }]}
-          >
-            <Input
-              style={{ width: '100%' }}
-              placeholder=""
-            />
-          </Form.Item>
-
           <UploadFormItem name="img" />
         </Form>
       </Drawer>

@@ -28,6 +28,7 @@ const Group: React.FC<groupInterface> = ({ orgImg }) => {
             setUrl(res.orgImg)
             resolve(res)
           }).catch(e => {
+            message.error(e)
             reject()
           })
         })          

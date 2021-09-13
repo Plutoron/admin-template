@@ -1,9 +1,9 @@
-import React, { useEffect, useCallback } from 'react'
-import { Button, Drawer, Form, Input, Upload, Select, message, Modal } from 'antd' 
-import { UploadOutlined } from '@ant-design/icons'
+import React, { useEffect } from 'react'
+import { Button, Drawer, Form, Input, Select, message, Modal } from 'antd' 
 import { SolutionTypes } from '@src/enums'
 import { post } from '@util/http'
 import { generateUploadFilelist } from '@util/util'
+import UploadFormItem from '@components/upload-form-item'
 
 const { useForm } = Form
 const { Option } = Select
@@ -21,14 +21,6 @@ interface Props {
 
 const _Drawer: React.FC<Props> = ({ visible, onClose, loading, onSubmitted, title, id, type, img }) => {
   const [form] = useForm()
-
-  const normFile = useCallback((e: any) => {
-    console.log('Upload event:', e);
-    if (Array.isArray(e)) {
-      return e;
-    }
-    return e && e.fileList;
-  }, [])
 
   useEffect(() => {
     if (!visible) {
@@ -68,6 +60,7 @@ const _Drawer: React.FC<Props> = ({ visible, onClose, loading, onSubmitted, titl
                 onClose()
                 resolve(res)
               }).catch(e => {
+                message.error(e)
                 reject()
               })
             })          
@@ -80,7 +73,7 @@ const _Drawer: React.FC<Props> = ({ visible, onClose, loading, onSubmitted, titl
   return (
     <>
       <Drawer
-        title="添加荣誉"
+        title="添加业务成果"
         placement="right"
         width={640}
         closable={false}
@@ -127,16 +120,7 @@ const _Drawer: React.FC<Props> = ({ visible, onClose, loading, onSubmitted, titl
             </Select>
           </Form.Item>
 
-          <Form.Item
-            name="img"
-            label="图片"
-            valuePropName="fileList"
-            getValueFromEvent={normFile}
-          >
-            <Upload name="file" action="/server/upload" accept="image/*" listType="picture" maxCount={1}>
-              <Button icon={<UploadOutlined />}>点击上传</Button>
-            </Upload>
-          </Form.Item>
+          <UploadFormItem name="img" />
         </Form>
       </Drawer>
     </>

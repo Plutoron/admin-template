@@ -17,7 +17,8 @@ export interface aboutInterface {
   mail: string,
   qrcode: string,
   address: string, 
-  intro?: string, 
+  fillinfo: string,
+  intro?: string,
   orgImg?: string
 }
 

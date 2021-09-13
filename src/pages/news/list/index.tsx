@@ -51,6 +51,7 @@ function News() {
             getData()
             resolve(res)
           }).catch(e => {
+            message.error(e)
             reject()
           })
         })       

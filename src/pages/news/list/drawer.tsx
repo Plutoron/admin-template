@@ -1,9 +1,9 @@
-import React, { useMemo, useState, useEffect, useCallback } from 'react'
-import { Button, Drawer, Form, Input, Upload, message, Modal, DatePicker } from 'antd' 
-import { UploadOutlined } from '@ant-design/icons'
+import React, { useEffect } from 'react'
+import { Button, Drawer, Form, Input, message, Modal, DatePicker } from 'antd' 
 import moment from 'moment';
 import { post } from '@util/http'  
 import { generateUploadFilelist } from '@util/util'  
+import UploadFormItem from '@components/upload-form-item'
 
 const { useForm } = Form
 
@@ -20,14 +20,6 @@ interface Props {
 
 const _Drawer: React.FC<Props> = ({ visible, onClose, onSubmitted, id, title, subtitle, time, poster }) => {
   const [form] = useForm()
-
-  const normFile = useCallback((e: any) => {
-    console.log('Upload event:', e);
-    if (Array.isArray(e)) {
-      return e;
-    }
-    return e && e.fileList;
-  }, [])
 
   useEffect(() => {
     if (!visible) {
@@ -69,6 +61,7 @@ const _Drawer: React.FC<Props> = ({ visible, onClose, onSubmitted, id, title, su
                 onClose()
                 resolve(res)
               }).catch(e => {
+                message.error(e)
                 reject()
               })
             })          
@@ -139,16 +132,7 @@ const _Drawer: React.FC<Props> = ({ visible, onClose, onSubmitted, id, title, su
             <DatePicker />
           </Form.Item>
 
-          <Form.Item
-            name="poster"
-            label="图片"
-            valuePropName="fileList"
-            getValueFromEvent={normFile}
-          >
-            <Upload name="file" action="/server/upload" accept="image/*" listType="picture" maxCount={1}>
-              <Button icon={<UploadOutlined />}>点击上传</Button>
-            </Upload>
-          </Form.Item>
+          <UploadFormItem name="poster" />
         </Form>
       </Drawer>
     </>

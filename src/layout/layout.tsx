@@ -16,7 +16,7 @@ const LayoutWrap = ({ children }) => {
     <>
       <Layout className="custom-layout">
         <Header className="header FBH FBJB">
-          <div className="logo">xxxxx</div>
+          <div className="logo">后台管理</div>
           <div className="username">Admin</div>
         </Header>
 

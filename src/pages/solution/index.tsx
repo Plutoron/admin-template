@@ -46,6 +46,7 @@ function Solution() {
                 getData()
                 resolve(res)
               }).catch(e => {
+                message.error(e)
                 reject()
               })
             })       

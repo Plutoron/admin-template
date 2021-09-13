@@ -75,25 +75,26 @@ export default function ajax (options) {
 
     request = fetch(urlPrefix + options.url, props).then((response) => {
       console.log(response)
-      if (response.status === 200) {
+      if (response.ok) {
         return response.json()
       } else {
-        return(response)
+        return({
+          success: false,
+          error: response.statusText
+        })
       }
     })
   }
 
   return new Promise((resolve, reject) => {
     request.then((res) => {
-      if (res) {
-        const { success, error, data } = res
-        if (success) {
-          resolve(data)
-        } else {
-          reject(error)
-        }
+      const { success, error, data } = res
+
+      console.log(res)
+      if (success) {
+        resolve(data)
       } else {
-        reject(new Error('request error'))
+        reject(error)
       }
     })
   })

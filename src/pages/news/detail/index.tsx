@@ -26,7 +26,7 @@ const NewsDetail = () => {
 
   const submit = useCallback((html) => {
     Modal.confirm({
-      title: '您确定要更新招贤纳士吗',
+      title: '您确定要更新新闻内容吗',
       onOk() {
         return new Promise((resolve, reject) => {
           post(`news/${id}`, {
@@ -35,6 +35,7 @@ const NewsDetail = () => {
             message.success('提交成功')
             resolve(res)
           }).catch(e => {
+            message.error(e)
             reject()
           })
         })          

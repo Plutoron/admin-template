@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import { Button, Input, Modal, Form, Upload, message } from 'antd'
-import { UploadOutlined } from '@ant-design/icons'
+import { Button, Input, Modal, Form, message } from 'antd'
 import { post } from '@util/http'
 import { generateUploadFilelist } from '@util/util'
+import UploadFormItem from '@components/upload-form-item'
 
 import { aboutInterface } from './index'
 
@@ -15,7 +15,8 @@ const Info: React.FC<aboutInterface> = ({
   mail,
   address,
   logo,
-  qrcode
+  qrcode,
+  fillinfo
 }) => {
   const [info, setInfo] = useState<aboutInterface>({} as aboutInterface)
 
@@ -50,6 +51,7 @@ const Info: React.FC<aboutInterface> = ({
                 message.success('提交成功')
                 resolve(res)
               }).catch(e => {
+                message.error(e)
                 reject()
               })
             })          
@@ -75,7 +77,8 @@ const Info: React.FC<aboutInterface> = ({
       mail,
       address,
       logo,
-      qrcode
+      qrcode,
+      fillinfo
     })
 
     form.setFieldsValue({
@@ -85,7 +88,8 @@ const Info: React.FC<aboutInterface> = ({
       mail,
       address,
       logo: generateUploadFilelist(logo),
-      qrcode: generateUploadFilelist(qrcode)
+      qrcode: generateUploadFilelist(qrcode),
+      fillinfo
     })
   }, [  
     name,
@@ -165,27 +169,9 @@ const Info: React.FC<aboutInterface> = ({
               />
             </Form.Item>
 
-            <Form.Item
-              name="logo"
-              label="logo"
-              valuePropName="fileList"
-              getValueFromEvent={normFile}
-            >
-              <Upload name="file" action="/server/upload" accept="image/*" listType="picture" maxCount={1}>
-                <Button icon={<UploadOutlined />}>点击上传</Button>
-              </Upload>
-            </Form.Item>
+            <UploadFormItem name="logo" />
 
-            <Form.Item
-              name="qrcode"
-              label="公众号二维码"
-              valuePropName="fileList"
-              getValueFromEvent={normFile}
-            >
-              <Upload name="file" action="/server/upload"  accept="image/*" listType="picture" maxCount={1}>
-                <Button icon={<UploadOutlined />}>点击上传</Button>
-              </Upload>
-            </Form.Item>
+            <UploadFormItem name="qrcode" />
 
             <Form.Item
               name="fillinfo"

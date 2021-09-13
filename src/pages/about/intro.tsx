@@ -22,6 +22,7 @@ const Intro: React.FC<introInterface> = ({ intro }) => {
             message.success('提交成功')
             resolve(res)
           }).catch(e => {
+            message.error(e)
             reject()
           })
         })         
