@@ -1,3 +1,5 @@
+import { message } from "antd"
+
 const config = {
   baseUrl: '/server/',
 }
@@ -88,7 +90,16 @@ export default function ajax (options) {
 
   return new Promise((resolve, reject) => {
     request.then((res) => {
-      const { success, error, data } = res
+      const { success, error, data, code } = res
+
+      if (code === 0) {
+        message.error(
+          '请先登录', 
+          1.5, 
+          () => window.location.href = '/#/login'
+        )
+        return
+      }
 
       console.log(res)
       if (success) {

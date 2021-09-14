@@ -28,8 +28,8 @@ const LayoutWrap = ({ children }) => {
               style={{ height: '100%', borderRight: 0 }}
             >
               {
-                routes.map(({ path, title, redirect }) => {
-                  if (redirect) return
+                routes.map(({ path, title, redirect, hide }) => {
+                  if (redirect || hide) return
                   return (<Menu.Item key={path}>
                     <Link to={path}>
                       { title }

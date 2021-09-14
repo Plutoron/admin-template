@@ -16,6 +16,8 @@ const Honor = lazy(() => import('@pages/honor'))
 const Solution = lazy(() => import('@pages/solution'))
 const Hire = lazy(() => import('@pages/hire'))
 const About = lazy(() => import('@pages/about'))
+const User = lazy(() => import('@pages/user'))
+const Login = lazy(() => import('@pages/login'))
 
 const routers = [{
   path: '/home',
@@ -48,10 +50,15 @@ const routers = [{
   path: '/about',
   title: '关于我们配置',
   component: About
-// }, {
-//   path: '/user',
-//   title: '用户管理',
-//   component: User
+}, {
+  path: '/user',
+  title: '用户管理',
+  component: User
+}, {
+  path: '/login',
+  title: '登录',
+  component: Login,
+  hide: true
 }, {
   redirect: true,
   path: '/home',
