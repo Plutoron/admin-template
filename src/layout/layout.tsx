@@ -7,6 +7,8 @@ import './layout.css'
 
 import zhCN from 'antd/lib/locale/zh_CN';
 
+import Userinfo from '@components/userinfo'
+
 const { Header, Sider } = Layout;
 
 const LayoutWrap = ({ children }) => {
@@ -17,7 +19,9 @@ const LayoutWrap = ({ children }) => {
       <Layout className="custom-layout">
         <Header className="header FBH FBJB">
           <div className="logo">后台管理</div>
-          <div className="username">Admin</div>
+          <div className="username">
+            { pathname !== '/login' && <Userinfo /> }
+          </div> 
         </Header>
 
         <Layout>

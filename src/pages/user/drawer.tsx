@@ -95,6 +95,7 @@ const _Drawer: React.FC<Props> = ({ visible, onClose, onSubmitted, id, username,
               style={{ width: '100%' }}
               placeholder=""
               maxLength={20}
+              disabled={id && id === window?.user?.id}
             />
           </Form.Item>
 

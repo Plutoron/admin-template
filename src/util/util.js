@@ -7,3 +7,11 @@ export const generateUploadFilelist = (img) => {
     response: { success: true, data: img}
   }] : []
 }
+
+export const clearAllCookie = () => {
+  const keys = document.cookie.match(/[^ =;]+(?=\=)/g)
+  if (keys) {
+    for (var i = keys.length; i--;)
+      document.cookie = keys[i] + '=0;expires=' + new Date(0).toUTCString()
+  }
+}

@@ -34,7 +34,12 @@ const _Table: React.FC<_TableInterface> = ({ loading, data, triggerEdit, trigger
         const { username, id, password } = record
         return <>
           <a className="mr8" onClick={() => triggerEdit({ username, id, password })}>编辑</a>
-          <a onClick={() => triggerDelete({ username, id })}>删除</a>
+
+          {
+            window?.user?.id !== id && (
+              <a onClick={() => triggerDelete({ username, id })}>删除</a>
+            )
+          }
         </>
       }
     }]
