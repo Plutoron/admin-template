@@ -3,10 +3,11 @@ import { Button, Upload, Form } from 'antd'
 import { UploadOutlined } from '@ant-design/icons'
 
 export interface uploadInterface {
-  name: string
+  name: string,
+  label: string
 }
 
-const _Upload: React.FC<uploadInterface> = ({ name }) => {
+const _Upload: React.FC<uploadInterface> = ({ label, name }) => {
   const normFile = useCallback((e: any) => {
     console.log('Upload event:', e);
     if (Array.isArray(e)) {
@@ -19,7 +20,7 @@ const _Upload: React.FC<uploadInterface> = ({ name }) => {
     <>
       <Form.Item
         name={name}
-        label="图片"
+        label={label || "图片"}
         valuePropName="fileList"
         getValueFromEvent={normFile}
       >

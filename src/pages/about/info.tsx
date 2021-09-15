@@ -169,9 +169,9 @@ const Info: React.FC<aboutInterface> = ({
               />
             </Form.Item>
 
-            <UploadFormItem name="logo" />
+            <UploadFormItem label="logo" name="logo" />
 
-            <UploadFormItem name="qrcode" />
+            <UploadFormItem label="公众号二维码" name="qrcode" />
 
             <Form.Item
               name="fillinfo"
