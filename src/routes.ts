@@ -18,6 +18,7 @@ const Hire = lazy(() => import('@pages/hire'))
 const About = lazy(() => import('@pages/about'))
 const User = lazy(() => import('@pages/user'))
 const Login = lazy(() => import('@pages/login'))
+const Tool = lazy(() => import('@pages/tool'))
 
 const routers = [{
   path: '/home',
@@ -54,6 +55,10 @@ const routers = [{
   path: '/user',
   title: '用户管理',
   component: User
+}, {
+  path: '/tool',
+  title: '小公具',
+  component: Tool
 }, {
   path: '/login',
   title: '登录',
