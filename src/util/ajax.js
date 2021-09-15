@@ -1,7 +1,7 @@
 import { message } from "antd"
 
 const config = {
-  baseUrl: '/server/',
+  baseUrl: '/admin/server/',
 }
 
 const serialize = (obj) => {
