@@ -96,7 +96,7 @@ export default function ajax (options) {
         message.error(
           '请先登录', 
           1.5, 
-          () => window.location.href = '/#/login'
+          () => window.location.href = `${window.location.origin}${window.location.pathname}#/login`
         )
         return
       }
