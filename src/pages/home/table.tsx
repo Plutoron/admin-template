@@ -1,15 +1,15 @@
 import React, { useMemo, useState, useEffect, useCallback } from 'react'
 import { Table } from 'antd' 
 
-export interface HonorInterface {
+export interface Interface {
   id: number,
   img: string
 }
 
 export interface _TableInterface {
   loading?: boolean,
-  data: [HonorInterface?],
-  triggerEdit: ({}: HonorInterface) => any
+  data: [Interface?],
+  triggerEdit: ({}: Interface) => any
   triggerDelete: ({}: { title: string, id: number }) => any
 }
 
@@ -27,10 +27,10 @@ const _Table: React.FC<_TableInterface> = ({ loading, data, triggerEdit, trigger
     }, {
       title: '操作',
       render: (text, record, index) => {
-        const { title, id, img } = record
+        const { id, img } = record
         return <>
-          <a className="mr8" onClick={() => triggerEdit({ title, id, img })}>编辑</a>
-          <a onClick={() => triggerDelete({ title, id })}>删除</a>
+          <a className="mr8" onClick={() => triggerEdit({ id, img })}>编辑</a>
+          <a onClick={() => triggerDelete({ id })}>删除</a>
         </>
       }
     }]
